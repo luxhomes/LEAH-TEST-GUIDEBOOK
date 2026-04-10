@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Property — Guest Guidebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5B0;
+    --gold-dark: #8A6A3A;
+    --off-white: #FAF8F4;
+    --warm-white: #F5F1EB;
+    --charcoal: #2A2825;
+    --charcoal-mid: #4A4744;
+    --charcoal-light: #7A7774;
+    --border: rgba(201,169,110,0.25);
+    --border-light: rgba(201,169,110,0.12);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--off-white);
+    color: var(--charcoal);
+    font-weight: 300;
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(250,248,244,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.4s;
+  }
+  .nav-brand {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    color: var(--charcoal);
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--charcoal-mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    min-height: 600px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(42,40,37,0.35) 0%, rgba(42,40,37,0.55) 100%),
+      url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1800&q=80') center/cover no-repeat;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    padding: 2rem;
+    animation: fadeUp 1.2s ease forwards;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 8vw, 6.5rem);
+    font-weight: 300;
+    color: #FAF8F4;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .hero-sub {
+    font-size: 0.82rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(250,248,244,0.65);
+  }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    color: rgba(250,248,244,0.55);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: fadeUp 1.6s ease forwards;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 6rem 0;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 3rem;
+  }
+  .section-eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--charcoal);
+    margin-bottom: 2rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold-dark); }
+  .divider {
+    width: 48px; height: 1px;
+    background: var(--gold);
+    margin-bottom: 2.5rem;
+  }
+  p { color: var(--charcoal-mid); max-width: 65ch; }
+
+  /* WELCOME */
+  .welcome-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .welcome-img {
+    aspect-ratio: 3/4;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .welcome-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+  }
+  .welcome-img:hover img { transform: scale(1.03); }
+  .welcome-text { }
+  .welcome-text p + p { margin-top: 1.25rem; }
+  .signature {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-style: italic;
+    color: var(--gold-dark);
+    margin-top: 2.5rem;
+    display: block;
+  }
+
+  /* AMENITIES */
+  .amenities { background: var(--warm-white); }
+  .amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+  .amenity-item {
+    padding: 2.5rem 2rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .amenity-item:hover { background: rgba(201,169,110,0.05); }
+  .amenity-item:nth-child(3n) { border-right: none; }
+  .amenity-item:nth-last-child(-n+3) { border-bottom: none; }
+  .amenity-icon {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .amenity-name {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+  }
+  .amenity-desc {
+    font-size: 0.85rem;
+    color: var(--charcoal-light);
+    line-height: 1.6;
+    max-width: none;
+  }
+
+  /* MAP */
+  .map-frame {
+    margin-top: 3rem;
+    aspect-ratio: 16/7;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .map-frame iframe { width: 100%; height: 100%; border: none; }
+
+  /* DIRECTIONS */
+  .directions-list {
+    margin-top: 2.5rem;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .direction-item {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .direction-item:first-child { border-top: 1px solid var(--border-light); }
+  .direction-num {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+    min-width: 2.5rem;
+    flex-shrink: 0;
+  }
+  .direction-body strong {
+    display: block;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 0.35rem;
+  }
+  .direction-body p {
+    font-size: 0.9rem;
+    color: var(--charcoal-mid);
+    max-width: none;
+  }
+
+  /* WIFI */
+  .wifi-box {
+    margin-top: 3rem;
+    border: 1px solid var(--border);
+    padding: 3rem 3.5rem;
+    display: flex;
+    gap: 5rem;
+    align-items: center;
+    background: var(--warm-white);
+  }
+  .wifi-field label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+  .wifi-field .value {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--charcoal);
+    letter-spacing: 0.04em;
+  }
+  .wifi-note {
+    font-size: 0.82rem;
+    color: var(--charcoal-light);
+    max-width: 35ch;
+  }
+
+  /* HOUSE RULES */
+  .rules { background: var(--charcoal); }
+  .rules .section-eyebrow { color: var(--gold-light); }
+  .rules .section-title { color: var(--off-white); }
+  .rules .divider { background: var(--gold); }
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(201,169,110,0.15);
+    border: 1px solid rgba(201,169,110,0.15);
+    margin-top: 3rem;
+  }
+  .rule-item {
+    padding: 2rem 2.5rem;
+    background: var(--charcoal);
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    transition: background 0.3s;
+  }
+  .rule-item:hover { background: rgba(201,169,110,0.06); }
+  .rule-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+  }
+  .rule-text strong {
+    display: block;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--off-white);
+    margin-bottom: 0.35rem;
+  }
+  .rule-text p {
+    font-size: 0.87rem;
+    color: rgba(250,248,244,0.55);
+    max-width: none;
+  }
+
+  /* DINING */
+  .dining-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 3rem;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .dining-card {
+    background: var(--off-white);
+    padding: 2rem;
+    transition: background 0.3s;
+  }
+  .dining-card:hover { background: var(--warm-white); }
+  .dining-tag {
+    display: inline-block;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .dining-name {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+  .dining-info {
+    font-size: 0.82rem;
+    color: var(--charcoal-light);
+  }
+  .dining-dist {
+    margin-top: 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+  }
+
+  /* SAFETY */
+  .safety { background: var(--warm-white); }
+  .safety-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .safety-card {
+    border: 1px solid var(--border);
+    padding: 2rem 2.5rem;
+    background: var(--off-white);
+    display: flex;
+    gap: 1.5rem;
+  }
+  .safety-icon-wrap {
+    width: 42px; height: 42px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .safety-body strong {
+    display: block;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 0.35rem;
+  }
+  .safety-body p {
+    font-size: 0.87rem;
+    color: var(--charcoal-light);
+    max-width: none;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--charcoal);
+    padding: 3rem 0;
+    text-align: center;
+    border-top: 1px solid rgba(201,169,110,0.15);
+  }
+  footer .brand {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  footer p {
+    font-size: 0.78rem;
+    color: rgba(250,248,244,0.35);
+    letter-spacing: 0.08em;
+    max-width: none;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50%       { opacity: 1;   transform: scaleY(1.15); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .container { padding: 0 1.5rem; }
+    section { padding: 4rem 0; }
+    .welcome-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+    .amenity-item:nth-child(3n) { border-right: 1px solid var(--border); }
+    .amenity-item:nth-child(2n) { border-right: none; }
+    .rules-grid { grid-template-columns: 1fr; }
+    .dining-grid { grid-template-columns: 1fr; }
+    .safety-grid { grid-template-columns: 1fr; }
+    .wifi-box { flex-direction: column; gap: 2rem; padding: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">Test Property</span>
+  <ul class="nav-links">
+    <li><a href="#welcome">Welcome</a></li>
+    <li><a href="#amenities">Amenities</a></li>
+    <li><a href="#directions">Directions</a></li>
+    <li><a href="#wifi">Wi-Fi</a></li>
+    <li><a href="#rules">House Rules</a></li>
+    <li><a href="#dining">Dining</a></li>
+    <li><a href="#safety">Safety</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Welcome to Your Stay</p>
+    <h1 class="hero-title">Test<br><em>Property</em></h1>
+    <p class="hero-sub">Guest Guidebook &nbsp;·&nbsp; Your Home Away From Home</p>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- WELCOME -->
+<section id="welcome">
+  <div class="container">
+    <div class="welcome-grid">
+      <div class="welcome-img reveal">
+        <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80" alt="Interior view">
+      </div>
+      <div class="welcome-text reveal">
+        <p class="section-eyebrow">A Warm Welcome</p>
+        <h2 class="section-title">Glad to Have<br><em>You Here</em></h2>
+        <div class="divider"></div>
+        <p>Welcome to Test Property — we are so delighted to host you. We have thoughtfully curated every detail of this space to ensure your stay is seamless, comfortable, and truly memorable.</p>
+        <p style="margin-top:1.25rem;">Whether you are here for a quick retreat or an extended escape, please treat this home as your own. Do not hesitate to reach out if there is anything at all we can do to make your stay more exceptional.</p>
+        <p style="margin-top:1.25rem;">This guidebook is your complete companion — from the Wi-Fi password to our favourite local dining spots. We hope you love it here as much as we do.</p>
+        <span class="signature">Your Hosts</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AMENITIES -->
+<section id="amenities" class="amenities">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">What's Included</p>
+      <h2 class="section-title">Property<br><em>Amenities</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="amenities-grid reveal">
+      <div class="amenity-item">
+        <span class="amenity-icon">🛁</span>
+        <p class="amenity-name">Ensuite Bathrooms</p>
+        <p class="amenity-desc">Rainfall shower, deep soaking tub, and premium bath amenities provided.</p>
+      </div>
+      <div class="amenity-item">
+        <span class="amenity-icon">☕</span>
+        <p class="amenity-name">Fully Equipped Kitchen</p>
+        <p class="amenity-desc">Espresso machine, cookware, and all essentials for a home-cooked meal.</p>
+      </div>
+      <div class="amenity-item">
+        <span class="amenity-icon">📶</span>
+        <p class="amenity-name">High-Speed Wi-Fi</p>
+        <p class="amenity-desc">Fibre connection throughout. Password found in the Wi-Fi section below.</p>
+      </div>
+      <div class="amenity-item">
+        <span class="amenity-icon">🅿️</span>
+        <p class="amenity-name">Private Parking</p>
+        <p class="amenity-desc">Dedicated off-street parking space available for your vehicle.</p>
+      </div>
+      <div class="amenity-item">
+        <span class="amenity-icon">🌿</span>
+        <p class="amenity-name">Private Garden</p>
+        <p class="amenity-desc">A tranquil outdoor space for your exclusive use during your stay.</p>
+      </div>
+      <div class="amenity-item">
+        <span class="amenity-icon">📺</span>
+        <p class="amenity-name">Smart TV & Streaming</p>
+        <p class="amenity-desc">65" 4K Smart TV with Netflix, Disney+, and streaming apps pre-loaded.</p>
+      </div>
+      <div class="amenity-item">
+        <span class="amenity-icon">🧺</span>
+        <p class="amenity-name">Washer & Dryer</p>
+        <p class="amenity-desc">In-unit laundry with detergent supplied for your convenience.</p>
+      </div>
+      <div class="amenity-item">
+        <span class="amenity-icon">❄️</span>
+        <p class="amenity-name">Climate Control</p>
+        <p class="amenity-desc">Individual room AC and heating for year-round comfort.</p>
+      </div>
+      <div class="amenity-item">
+        <span class="amenity-icon">🛏️</span>
+        <p class="amenity-name">Premium Bedding</p>
+        <p class="amenity-desc">Hotel-grade linens, pillows, and towels freshly laundered for your arrival.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">Location</p>
+      <h2 class="section-title">Find<br><em>Us Here</em></h2>
+      <div class="divider"></div>
+      <p>Test Property is ideally positioned to explore the best of the area. The map below shows nearby landmarks, restaurants, and essential services.</p>
+    </div>
+    <div class="map-frame reveal">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15696.648083506!2d124.2452!3d8.2280!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32ff8c0a7a3c21ef%3A0x9d5a8a9f2b2c3c1a!2sIligan+City%2C+Lanao+del+Norte!5e0!3m2!1sen!2sph!4v1680000000000"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTIONS -->
+<section id="directions" style="background: var(--warm-white);">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">Getting Here</p>
+      <h2 class="section-title">Arrival<br><em>Directions</em></h2>
+      <div class="divider"></div>
+    </div>
+    <ul class="directions-list reveal">
+      <li class="direction-item">
+        <span class="direction-num">01</span>
+        <div class="direction-body">
+          <strong>From the Airport</strong>
+          <p>Exit the terminal and take a taxi or ride-share heading towards the city centre. The journey takes approximately 20–30 minutes depending on traffic. Share the address "Test Property, [Full Address]" with your driver.</p>
+        </div>
+      </li>
+      <li class="direction-item">
+        <span class="direction-num">02</span>
+        <div class="direction-body">
+          <strong>By Private Vehicle</strong>
+          <p>Enter our full address into your navigation. Once you arrive on the street, look for the [landmark or gate description]. Parking is available directly in front of the property — the space marked with our unit number is reserved for you.</p>
+        </div>
+      </li>
+      <li class="direction-item">
+        <span class="direction-num">03</span>
+        <div class="direction-body">
+          <strong>Check-In Instructions</strong>
+          <p>Check-in is from 3:00 PM onwards. A key lockbox is located at the front entrance. Your code will be sent via Airbnb message 24 hours before arrival. The unit is on the [floor] — take the stairs or lift to [level].</p>
+        </div>
+      </li>
+      <li class="direction-item">
+        <span class="direction-num">04</span>
+        <div class="direction-body">
+          <strong>Check-Out</strong>
+          <p>Check-out is by 11:00 AM. Simply leave the keys on the kitchen counter and pull the front door closed behind you. There is no need to strip the beds — our team will take care of everything.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- WIFI -->
+<section id="wifi">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">Connectivity</p>
+      <h2 class="section-title">Wi-Fi<br><em>Access</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="wifi-box reveal">
+      <div class="wifi-field">
+        <label>Network Name (SSID)</label>
+        <span class="value">TestProperty_5G</span>
+      </div>
+      <div class="wifi-field">
+        <label>Password</label>
+        <span class="value">Welcome2024!</span>
+      </div>
+      <p class="wifi-note">For the fastest connection, use the 5G network. A 2.4G network (TestProperty_2G) is also available with the same password for older devices.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOUSE RULES -->
+<section id="rules" class="rules">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">Important</p>
+      <h2 class="section-title">House<br><em>Rules</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="rules-grid reveal">
+      <div class="rule-item">
+        <span class="rule-dot"></span>
+        <div class="rule-text">
+          <strong>No Smoking</strong>
+          <p>Strictly no smoking inside the property. A designated outdoor area is available. A deep-cleaning fee applies if this rule is violated.</p>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-dot"></span>
+        <div class="rule-text">
+          <strong>Quiet Hours</strong>
+          <p>Please observe quiet hours between 10:00 PM and 8:00 AM out of respect for our neighbours.</p>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-dot"></span>
+        <div class="rule-text">
+          <strong>No Unregistered Guests</strong>
+          <p>The property accommodates only the number of guests declared at booking. Overnight guests must be pre-approved.</p>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-dot"></span>
+        <div class="rule-text">
+          <strong>Pets Policy</strong>
+          <p>We love animals! Pets are permitted with prior approval and the associated pet fee. Please keep them off furniture.</p>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-dot"></span>
+        <div class="rule-text">
+          <strong>Events & Parties</strong>
+          <p>No events, parties, or gatherings are permitted on the premises. Airbnb's party policy is strictly enforced.</p>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-dot"></span>
+        <div class="rule-text">
+          <strong>Treat It Like Home</strong>
+          <p>Please treat the property with care and report any damage promptly. We are understanding — accidents happen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DINING -->
+<section id="dining">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">Local Favourites</p>
+      <h2 class="section-title">Where to<br><em>Dine</em></h2>
+      <div class="divider"></div>
+      <p>Our curated list of nearby restaurants, cafés, and markets — personally recommended by your hosts.</p>
+    </div>
+    <div class="dining-grid reveal">
+      <div class="dining-card">
+        <span class="dining-tag">Fine Dining</span>
+        <p class="dining-name">The Grand Table</p>
+        <p class="dining-info">Contemporary cuisine with an exceptional wine list. Ideal for a special evening. Reservation recommended.</p>
+        <p class="dining-dist">⟶ 5 min drive</p>
+      </div>
+      <div class="dining-card">
+        <span class="dining-tag">Casual</span>
+        <p class="dining-name">Café Morena</p>
+        <p class="dining-info">A charming neighbourhood café serving excellent breakfast, freshly brewed coffee, and light lunches.</p>
+        <p class="dining-dist">⟶ 3 min walk</p>
+      </div>
+      <div class="dining-card">
+        <span class="dining-tag">Local Cuisine</span>
+        <p class="dining-name">Isla Kitchen</p>
+        <p class="dining-info">Authentic local dishes cooked from generational recipes. Cosy atmosphere and very popular with residents.</p>
+        <p class="dining-dist">⟶ 7 min walk</p>
+      </div>
+      <div class="dining-card">
+        <span class="dining-tag">Seafood</span>
+        <p class="dining-name">Pier 8 Grill</p>
+        <p class="dining-info">Fresh catch of the day served with stunning waterfront views. Best at sunset.</p>
+        <p class="dining-dist">⟶ 10 min drive</p>
+      </div>
+      <div class="dining-card">
+        <span class="dining-tag">Market</span>
+        <p class="dining-name">Weekend Market</p>
+        <p class="dining-info">A vibrant Saturday morning market. Pick up local produce, pastries, and artisan goods.</p>
+        <p class="dining-dist">⟶ 4 min walk · Saturdays 7AM</p>
+      </div>
+      <div class="dining-card">
+        <span class="dining-tag">Desserts</span>
+        <p class="dining-name">Mariposa Sweets</p>
+        <p class="dining-info">Handcrafted pastries, local delicacies, and the best halo-halo in the neighbourhood.</p>
+        <p class="dining-dist">⟶ 6 min walk</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section id="safety" class="safety">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">Your Safety</p>
+      <h2 class="section-title">Emergency<br><em>Information</em></h2>
+      <div class="divider"></div>
+      <p>Your safety is our highest priority. Please familiarise yourself with the information below at the start of your stay.</p>
+    </div>
+    <div class="safety-grid reveal">
+      <div class="safety-card">
+        <div class="safety-icon-wrap">🚨</div>
+        <div class="safety-body">
+          <strong>Emergency Number</strong>
+          <p>Philippines National Emergency: <strong>911</strong><br>BFP Fire Emergency: <strong>160</strong><br>PNP Police: <strong>117</strong></p>
+        </div>
+      </div>
+      <div class="safety-card">
+        <div class="safety-icon-wrap">🏥</div>
+        <div class="safety-body">
+          <strong>Nearest Hospital</strong>
+          <p>Amai Pakpak Medical Center is the nearest hospital. Located approximately 10 minutes by car from the property.</p>
+        </div>
+      </div>
+      <div class="safety-card">
+        <div class="safety-icon-wrap">🔥</div>
+        <div class="safety-body">
+          <strong>Fire Safety</strong>
+          <p>A fire extinguisher is located under the kitchen sink. Smoke detectors are installed in every room. Fire exits are marked on each floor.</p>
+        </div>
+      </div>
+      <div class="safety-card">
+        <div class="safety-icon-wrap">💊</div>
+        <div class="safety-body">
+          <strong>First Aid Kit</strong>
+          <p>A fully stocked first aid kit is located in the bathroom cabinet under the sink. Please inform us if supplies are used.</p>
+        </div>
+      </div>
+      <div class="safety-card">
+        <div class="safety-icon-wrap">📞</div>
+        <div class="safety-body">
+          <strong>Host Contact</strong>
+          <p>We are available 24/7 via Airbnb message. For urgent matters call or text: <strong>+63 XXX XXX XXXX</strong></p>
+        </div>
+      </div>
+      <div class="safety-card">
+        <div class="safety-icon-wrap">🌊</div>
+        <div class="safety-body">
+          <strong>Natural Disaster Protocol</strong>
+          <p>In the event of severe weather or earthquake, follow local authority guidance. The nearest evacuation centre is [Location Name], 2km away.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <span class="brand">Test Property</span>
+    <p>Guest Guidebook &nbsp;·&nbsp; We hope you have a wonderful stay.</p>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
